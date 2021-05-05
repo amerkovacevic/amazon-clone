@@ -1,22 +1,36 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import './Login.css';
+import { auth } from './firebase';
 
 function Login() {
-
+    
+    const history = useHistory();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const signIn = e => {
         e.preventDefault();
 
-        //firebase login here
+        //login user
+        auth.signInWithEmailAndPassword(email, password)
+        .then(auth => {
+            history.push('/')
+        })
+        .catch(error => alert(error.message))
     }
 
     const register = e => {
         e.preventDefault();
 
-        //firebase registration here
+        //create user
+        auth.createUserWithEmailAndPassword(email, password)
+        .then((auth) => {
+            if (auth) {
+                history.push('/')
+            }
+        })
+        .catch(error => alert(error.message))
     }
 
     return (
@@ -53,7 +67,7 @@ function Login() {
                 </form>
 
                 <p>
-                    By signing in you agree to AMAZON CLONE'S Conditions of Use & Sale. 
+                    By signing in you agree to AMER'S AMAZON CLONE Conditions of Use & Sale. 
                     Please see our Privacy Notice, our Cookies Notice, and our 
                     Interest-Based Ads Notice.
                 </p>
